@@ -5,7 +5,7 @@ import java.util.Observable;
 
 
 /** The state of a game of 2048.
- *  @author TODO: YOUR NAME HERE
+ *  @author voyagingCoder
  */
 public class Model extends Observable {
     /** Current contents of the board. */
@@ -94,6 +94,154 @@ public class Model extends Observable {
         setChanged();
     }
 
+    /** Move only one column North
+     * @param column
+     */
+    private boolean oneColumnNorth(int column){
+        int BoardSize = board.size();
+        boolean changed = false;
+        // TODO: 单列向上移动的逻辑
+        for(int i = BoardSize-1; i >= 0; i--){//i为当前进行处理的位置
+            if (board.tile(column, i) == null){
+                //当前为空，把下一个tile挪到当前位置
+                for (int j = i - 1; j >= 0; j--) {
+                    if (board.tile(column, j) != null) {
+                        Tile t = board.tile(column, j);
+                        board.move(column, i, t);
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+            //当前不为空，找到下一个不为空的位置，相同则merge，不同则break
+            for (int j = i - 1; j >= 0; j--) {
+                if (board.tile(column, j) != null) {
+                    if (board.tile(column, j).value() == board.tile(column, i).value()) {
+                        Tile t = board.tile(column, j);
+                        board.move(column, i, t);
+                        changed = true;
+                        if(board.tile(column, i).value()>score){
+                            score = board.tile(column, i).value();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return changed;
+    }
+
+    /** Move only one column South
+     * @param column
+     */
+    private boolean oneColumnSouth(int column){
+        int BoardSize = board.size();
+        boolean changed = false;
+        // TODO: 单列向下移动的逻辑
+        for(int i = 0; i < BoardSize; i++){//i为当前进行处理的位置
+            if (board.tile(column, i) == null){
+                //当前为空，把下一个tile挪到当前位置
+                for (int j = i - 1; j >= 0; j--) {
+                    if (board.tile(column, j) != null) {
+                        Tile t = board.tile(column, j);
+                        board.move(column, i, t);
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+            //当前不为空，找到下一个不为空的位置，相同则merge，不同则break
+            for (int j = i + 1; j < BoardSize; j++) {
+                if (board.tile(column, j) != null) {
+                    if (board.tile(column, j).value() == board.tile(column, i).value()) {
+                        Tile t = board.tile(column, j);
+                        board.move(column, i, t);
+                        changed = true;
+                        if(board.tile(column, i).value()>score){
+                            score = board.tile(column, i).value();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return changed;
+    }
+
+    /** Move only one row East
+     * @param row
+     */
+    private boolean oneRowEast(int row){
+        int BoardSize = board.size();
+        boolean changed = false;
+        // TODO: 单行向右移动的逻辑
+        for(int i = BoardSize-1; i >= 0; i--){//i为当前进行处理的位置
+            if (board.tile(i, row) == null){
+                //当前为空，把下一个tile挪到当前位置
+                for (int j = i - 1; j >= 0; j--) {
+                    if (board.tile(j, row) != null) {
+                        Tile t = board.tile(j, row);
+                        board.move(i, row, t);
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+            //当前不为空，找到下一个不为空的位置，相同则merge，不同则break
+            for (int j = i - 1; j >= 0; j--) {
+                if (board.tile(j, row) != null) {
+                    if (board.tile(j, row).value() == board.tile(j, row).value()) {
+                        Tile t = board.tile(j, row);
+                        board.move(i, row, t);
+                        changed = true;
+                        if(board.tile(i, row).value()>score){
+                            score = board.tile(i, row).value();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return changed;
+    }
+
+    /** Move only one row West
+     * @param row
+     */
+    private boolean oneRowWest(int row){
+        int BoardSize = board.size();
+        boolean changed = false;
+        // TODO: 单行向左移动的逻辑
+        for(int i = 0; i < BoardSize; i++){//i为当前进行处理的位置
+            if (board.tile(i, row) == null){
+                //当前为空，把下一个tile挪到当前位置
+                for (int j = i + 1; j < BoardSize; j++) {
+                    if (board.tile(j, row) != null) {
+                        Tile t = board.tile(j, row);
+                        board.move(i, row, t);
+                        changed = true;
+                        break;
+                    }
+                }
+            }
+            //当前不为空，找到下一个不为空的位置，相同则merge，不同则break
+            for (int j = i + 1; j < BoardSize; j++) {
+                if (board.tile(j, row) != null) {
+                    if (board.tile(j, row).value() == board.tile(j, row).value()) {
+                        Tile t = board.tile(j, row);
+                        board.move(i, row, t);
+                        changed = true;
+                        if(board.tile(i, row).value()>score){
+                            score = board.tile(i, row).value();
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+        return changed;
+    }
+
     /** Tilt the board toward SIDE. Return true iff this changes the board.
      *
      * 1. If two Tile objects are adjacent in the direction of motion and have
@@ -113,6 +261,33 @@ public class Model extends Observable {
         // TODO: Modify this.board (and perhaps this.score) to account
         // for the tilt to the Side SIDE. If the board changed, set the
         // changed local variable to true.
+        int BoardSize = board.size();
+        switch (side) {
+            case NORTH:
+                for(int i =0; i < BoardSize; i++) {
+                    boolean colChanged = oneColumnNorth(i);
+                    if(colChanged) changed = true;
+                }
+                break;
+            case SOUTH:
+                for(int i =0; i < BoardSize; i++) {
+                    boolean colChanged = oneColumnSouth(i);
+                    if(colChanged) changed = true;
+                }
+                break;
+            case WEST:
+                for(int i =0; i < BoardSize; i++) {
+                    boolean colChanged = oneRowEast(i);
+                    if(colChanged) changed = true;
+                }
+                break;
+            case EAST:
+                for(int i =0; i < BoardSize; i++) {
+                    boolean colChanged = oneRowWest(i);
+                    if(colChanged) changed = true;
+                }
+                break;
+        }
 
         checkGameOver();
         if (changed) {
@@ -120,6 +295,10 @@ public class Model extends Observable {
         }
         return changed;
     }
+
+    /** Deal with only one row or column so to be called for many times
+     */
+    // TODO: Add a function here
 
     /** Checks if the game is over and sets the gameOver variable
      *  appropriately.
@@ -138,6 +317,15 @@ public class Model extends Observable {
      * */
     public static boolean emptySpaceExists(Board b) {
         // TODO: Fill in this function.
+        int size_board = b.size();
+        for(int i=0; i<size_board; i++)
+        {
+            for(int j=0; j<size_board; j++)
+            {
+                if(b.tile(i,j)==null)
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -148,6 +336,18 @@ public class Model extends Observable {
      */
     public static boolean maxTileExists(Board b) {
         // TODO: Fill in this function.
+        int size_board = b.size();
+        for(int i=0; i<size_board; i++)
+        {
+            for(int j=0; j<size_board; j++)
+            {
+                // 获取对应的tile的值
+                if(b.tile(i,j)==null)
+                    continue;
+                else if(b.tile(i,j).value()==MAX_PIECE)
+                    return true;
+            }
+        }
         return false;
     }
 
@@ -159,6 +359,27 @@ public class Model extends Observable {
      */
     public static boolean atLeastOneMoveExists(Board b) {
         // TODO: Fill in this function.
+        if(emptySpaceExists(b))
+            return true;
+        int size_board = b.size();
+        //相邻相同的情况：行相同
+        for(int i=0; i<size_board; i++)
+        {
+            for(int j=0; j<size_board-1; j++)
+            {
+                if(b.tile(i,j).value()==b.tile(i,j+1).value())
+                    return true;
+            }
+        }
+        //相邻相同的情况：列相同
+        for(int i=0; i<size_board-1; i++)
+        {
+            for(int j=0; j<size_board; j++)
+            {
+                if(b.tile(i,j).value()==b.tile(i+1,j).value())
+                    return true;
+            }
+        }
         return false;
     }
 
