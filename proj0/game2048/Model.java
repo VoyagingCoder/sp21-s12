@@ -120,9 +120,7 @@ public class Model extends Observable {
                         Tile t = board.tile(column, j);
                         board.move(column, i, t);
                         changed = true;
-                        if(board.tile(column, i).value()>score){
-                            score = board.tile(column, i).value();
-                        }
+                        score += board.tile(column, i).value();
                     }
                     break;
                 }
@@ -157,9 +155,7 @@ public class Model extends Observable {
                         Tile t = board.tile(column, j);
                         board.move(column, i, t);
                         changed = true;
-                        if(board.tile(column, i).value()>score){
-                            score = board.tile(column, i).value();
-                        }
+                        score += board.tile(column, i).value();
                     }
                     break;
                 }
@@ -190,13 +186,11 @@ public class Model extends Observable {
             //当前不为空，找到下一个不为空的位置，相同则merge，不同则break
             for (int j = i - 1; j >= 0; j--) {
                 if (board.tile(j, row) != null) {
-                    if (board.tile(j, row).value() == board.tile(j, row).value()) {
+                    if (board.tile(j, row).value() == board.tile(i, row).value()) {
                         Tile t = board.tile(j, row);
                         board.move(i, row, t);
                         changed = true;
-                        if(board.tile(i, row).value()>score){
-                            score = board.tile(i, row).value();
-                        }
+                        score += board.tile(i, row).value();
                     }
                     break;
                 }
@@ -227,13 +221,11 @@ public class Model extends Observable {
             //当前不为空，找到下一个不为空的位置，相同则merge，不同则break
             for (int j = i + 1; j < BoardSize; j++) {
                 if (board.tile(j, row) != null) {
-                    if (board.tile(j, row).value() == board.tile(j, row).value()) {
+                    if (board.tile(j, row).value() == board.tile(i, row).value()) {
                         Tile t = board.tile(j, row);
                         board.move(i, row, t);
                         changed = true;
-                        if(board.tile(i, row).value()>score){
-                            score = board.tile(i, row).value();
-                        }
+                        score += board.tile(i, row).value();
                     }
                     break;
                 }
