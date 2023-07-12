@@ -141,7 +141,7 @@ public class Model extends Observable {
         for(int i = 0; i < BoardSize; i++){//i为当前进行处理的位置
             if (board.tile(column, i) == null){
                 //当前为空，把下一个tile挪到当前位置
-                for (int j = i - 1; j >= 0; j--) {
+                for (int j = i + 1; j < BoardSize; j++) {
                     if (board.tile(column, j) != null) {
                         Tile t = board.tile(column, j);
                         board.move(column, i, t);
