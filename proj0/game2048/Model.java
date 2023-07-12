@@ -277,13 +277,13 @@ public class Model extends Observable {
                 break;
             case WEST:
                 for(int i =0; i < BoardSize; i++) {
-                    boolean colChanged = oneRowEast(i);
+                    boolean colChanged = oneRowWest(i);
                     if(colChanged) changed = true;
                 }
                 break;
             case EAST:
                 for(int i =0; i < BoardSize; i++) {
-                    boolean colChanged = oneRowWest(i);
+                    boolean colChanged = oneRowEast(i);
                     if(colChanged) changed = true;
                 }
                 break;
