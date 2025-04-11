@@ -86,11 +86,26 @@ public class LinkedListDeque<T>{
         return LastNode.item;
     }
 
-    public T get(){
-        return null;
+    public T get(int index){
+        if(index > size - 1) {
+            return null;
+        }
+        Tnode iter = sentinal;
+        for(int counter = 0; counter <= index; counter++){
+            iter = iter.next;
+        }
+        return iter.item;
     }
 
-    public T getRecursive(int index){ return null; }
+    private T getRecursiveHelper(int index, Tnode iter){
+        if(index > size - 1 || index == 0){
+            return  iter.item;
+        }
+        return getRecursiveHelper(index-1,iter.next);
+    }
+
+    public T getRecursive(int index){
+        return getRecursiveHelper(index,sentinal.next); }
 
     public Iterator<T> iterator(){
         return null;
